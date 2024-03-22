@@ -114,6 +114,7 @@ abstract class ChatTheme {
     required this.userAvatarTextStyle,
     required this.userNameTextStyle,
     this.highlightMessageColor,
+    this.micButtonIcon,
   });
 
   /// Icon for select attachment button.
@@ -234,6 +235,9 @@ abstract class ChatTheme {
 
   /// Icon for send button.
   final Widget? sendButtonIcon;
+
+  /// Icon for mic button.
+  final Widget? micButtonIcon;
 
   /// Margin of send button.
   final EdgeInsets? sendButtonMargin;

@@ -103,6 +103,8 @@ class Chat extends StatefulWidget {
     this.slidableMessageBuilder,
     this.isLeftStatus = false,
     this.messageWidthRatio = 0.72,
+    this.onMicPressed,
+    this.buttonPadding,
   });
 
   /// See [Message.audioMessageBuilder].
@@ -111,6 +113,9 @@ class Chat extends StatefulWidget {
 
   /// See [Message.avatarBuilder].
   final Widget Function(types.User author)? avatarBuilder;
+
+  /// See [buttonPadding].
+  final EdgeInsets? buttonPadding;
 
   /// See [Message.bubbleBuilder].
   final Widget Function(
@@ -266,6 +271,9 @@ class Chat extends StatefulWidget {
 
   /// See [Input.onSendPressed].
   final void Function(types.PartialText) onSendPressed;
+
+  /// See [Input.onMicPressed].
+  final void Function()? onMicPressed;
 
   /// See [ChatList.scrollController].
   /// If provided, you cannot use the scroll to message functionality.
@@ -671,6 +679,8 @@ class ChatState extends State<Chat> {
                             onAttachmentPressed: widget.onAttachmentPressed,
                             onSendPressed: widget.onSendPressed,
                             options: widget.inputOptions,
+                            onMicPressed: widget.onMicPressed,
+                            actionButtonPadding: widget.buttonPadding,
                           ),
                     ],
                   ),

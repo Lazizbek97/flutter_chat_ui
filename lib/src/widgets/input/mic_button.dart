@@ -4,9 +4,9 @@ import '../state/inherited_chat_theme.dart';
 import '../state/inherited_l10n.dart';
 
 /// A class that represents send button widget.
-class SendButton extends StatelessWidget {
+class MicButton extends StatelessWidget {
   /// Creates send button widget.
-  const SendButton({
+  const MicButton({
     super.key,
     required this.onPressed,
     this.padding = EdgeInsets.zero,
@@ -20,8 +20,6 @@ class SendButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        // margin: InheritedChatTheme.of(context).theme.sendButtonMargin ??
-        //     const EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
         child: Semantics(
           label: InheritedL10n.of(context).l10n.sendButtonAccessibilityLabel,
           child: IconButton(
@@ -29,9 +27,9 @@ class SendButton extends StatelessWidget {
               minHeight: 24,
               minWidth: 24,
             ),
-            icon: InheritedChatTheme.of(context).theme.sendButtonIcon ??
+            icon: InheritedChatTheme.of(context).theme.micButtonIcon ??
                 Image.asset(
-                  'assets/icon-send.png',
+                  'assets/icon-mic.png',
                   color: InheritedChatTheme.of(context).theme.inputTextColor,
                   package: 'flutter_chat_ui',
                 ),

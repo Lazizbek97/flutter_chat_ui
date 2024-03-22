@@ -10,6 +10,7 @@ import '../state/inherited_chat_theme.dart';
 import '../state/inherited_l10n.dart';
 import 'attachment_button.dart';
 import 'input_text_field_controller.dart';
+import 'mic_button.dart';
 import 'send_button.dart';
 
 /// A class that represents bottom bar widget with a text field, attachment and
@@ -22,6 +23,8 @@ class Input extends StatefulWidget {
     this.onAttachmentPressed,
     required this.onSendPressed,
     this.options = const InputOptions(),
+    this.onMicPressed,
+    this.actionButtonPadding,
   });
 
   /// Whether attachment is uploading. Will replace attachment button with a
@@ -32,6 +35,12 @@ class Input extends StatefulWidget {
 
   /// See [AttachmentButton.onPressed].
   final VoidCallback? onAttachmentPressed;
+
+  /// mic button callback
+  final VoidCallback? onMicPressed;
+
+  /// button padding [actionButtonPadding]
+  final EdgeInsets? actionButtonPadding;
 
   /// Will be called on [SendButton] tap. Has [types.PartialText] which can
   /// be transformed to [types.TextMessage] and added to the messages list.
@@ -70,6 +79,7 @@ class _InputState extends State<Input> {
 
   bool _sendButtonVisible = false;
   late TextEditingController _textController;
+  bool _micVisible = true;
 
   @override
   void initState() {
@@ -197,7 +207,20 @@ class _InputState extends State<Input> {
                       keyboardType: widget.options.keyboardType,
                       maxLines: 5,
                       minLines: 1,
-                      onChanged: widget.options.onTextChanged,
+                      onChanged: (v) {
+                        if (widget.options.onTextChanged != null) {
+                          widget.options.onTextChanged!(v);
+                        }
+                        if (v.isNotEmpty) {
+                          setState(() {
+                            _micVisible = false;
+                          });
+                        } else {
+                          setState(() {
+                            _micVisible = true;
+                          });
+                        }
+                      },
                       onTap: widget.options.onTextFieldTap,
                       style: InheritedChatTheme.of(context)
                           .theme
@@ -211,15 +234,31 @@ class _InputState extends State<Input> {
                     ),
                   ),
                 ),
+                if (widget.onMicPressed != null && _micVisible)
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: 24,
+                      maxWidth: 30,
+                      minHeight: buttonPadding.bottom + buttonPadding.top + 24,
+                    ),
+                    child: Visibility(
+                      visible: _sendButtonVisible,
+                      child: MicButton(
+                        onPressed: _handleSendPressed,
+                        padding: widget.actionButtonPadding ?? buttonPadding,
+                      ),
+                    ),
+                  ),
                 ConstrainedBox(
                   constraints: BoxConstraints(
+                    minWidth: 24,
                     minHeight: buttonPadding.bottom + buttonPadding.top + 24,
                   ),
                   child: Visibility(
                     visible: _sendButtonVisible,
                     child: SendButton(
                       onPressed: _handleSendPressed,
-                      padding: buttonPadding,
+                      padding: widget.actionButtonPadding ?? buttonPadding,
                     ),
                   ),
                 ),
@@ -267,6 +306,7 @@ class InputOptions {
     this.autofocus = false,
     this.enableSuggestions = true,
     this.enabled = true,
+    this.onMicPressed,
   });
 
   /// Controls the [Input] clear behavior. Defaults to [InputClearMode.always].
@@ -305,4 +345,7 @@ class InputOptions {
 
   /// Controls the [TextInput] enabled behavior. Defaults to [true].
   final bool enabled;
+
+  /// on mic button pressed
+  final VoidCallback? onMicPressed;
 }
