@@ -244,9 +244,7 @@ class _InputState extends State<Input> {
                     child: Visibility(
                       visible: _sendButtonVisible,
                       child: MicButton(
-                        onPressed: () {
-                          widget.onMicPressed!();
-                        },
+                        onPressed: _handleSendPressed,
                         padding: widget.actionButtonPadding ?? buttonPadding,
                       ),
                     ),
